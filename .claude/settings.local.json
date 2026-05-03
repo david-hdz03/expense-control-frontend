@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(gunzip -c \"C:/Users/dhhdz/.claude/projects/F--test-full-stack-expense-control-frontend/fdce2b47-f032-4fb2-a0bf-43029cd1562b/tool-results/webfetch-1777093910530-x181f1.bin\")",
+      "Read(//tmp/**)",
+      "Bash(mkdir -p /tmp/design)",
+      "Bash(tar -xf \"C:/Users/dhhdz/.claude/projects/F--test-full-stack-expense-control-frontend/fdce2b47-f032-4fb2-a0bf-43029cd1562b/tool-results/webfetch-1777093910530-x181f1.bin\" -C /tmp/design)",
+      "Bash(tar -xf \"/mnt/c/Users/dhhdz/.claude/projects/F--test-full-stack-expense-control-frontend/fdce2b47-f032-4fb2-a0bf-43029cd1562b/tool-results/webfetch-1777093910530-x181f1.bin\" -C /tmp/design)"
+    ]
+  }
+}
