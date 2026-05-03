@@ -10,7 +10,7 @@ build/
 *.iml
 android/
 ios/
-web/
+# web/
 windows/
 linux/
 macos/
