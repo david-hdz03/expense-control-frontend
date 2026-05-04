@@ -28093,7 +28093,7 @@ s.fr$!==$&&A.aw()
 s.fr$=i
 j=i}s.a1u(new A.F9(p,B.Pn,o,j,h))
 s.MK()},
-iJ(){var s=A.aQM("")
+iJ(){var s=A.aQM("https://expense-control-backend-bp37.onrender.com/")
 if(s.length!==0)return s
 return"http://localhost:8000"},
 aQM(a){var s=B.c.cU(a)
