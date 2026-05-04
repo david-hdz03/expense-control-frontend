@@ -22,8 +22,17 @@ jobs:
       - name: Instalar dependencias
         run: flutter pub get
 
+      - name: Verificar si el secreto existe
+        run: |
+          if [ -z "${{ secrets.API_URL }}" ]; then
+            echo "🚨 EL SECRETO ESTÁ VACÍO. GitHub no lo está leyendo."
+            exit 1 # Esto detendrá el workflow para que no pierdas tiempo compilando
+          else
+            echo "✅ El secreto se cargó correctamente."
+          fi
+
       - name: Compilar Flutter Web
-        run: flutter build web --release --base-href "/expense-control-frontend/" --dart-define=API_BASE_URL=${{ secrets.API_URL }}
+        run: flutter build web --release --base-href "/expense-control-frontend/" --dart-define="API_BASE_URL=${{ secrets.API_URL }}"
 
       - name: Desplegar a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
