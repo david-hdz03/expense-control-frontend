@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 
 import '../models/auth_tokens.dart';
@@ -194,6 +195,29 @@ class AuthService {
       throw AuthException(response.statusCode, _extractError(response.body));
     }
     return PasswordResetRequestResult.fromJson(
+      jsonDecode(response.body) as Map<String, dynamic>,
+    );
+  }
+
+  Future<AuthTokens> loginWithGoogle({
+    String? idToken,
+    String? accessToken,
+  }) async {
+    assert(idToken != null || accessToken != null, 'Provide idToken or accessToken');
+    final body = <String, String>{
+      'platform': kIsWeb ? 'web' : 'android',
+    };
+    if (idToken != null) body['id_token'] = idToken;
+    if (accessToken != null) body['access_token'] = accessToken;
+    final response = await _client.post(
+      Uri.parse('${ApiConfig.baseUrl}/api/auth/google'),
+      headers: const {'Content-Type': 'application/json'},
+      body: utf8.encode(jsonEncode(body)),
+    );
+    if (response.statusCode != 200) {
+      throw AuthException(response.statusCode, _extractError(response.body));
+    }
+    return AuthTokens.fromJson(
       jsonDecode(response.body) as Map<String, dynamic>,
     );
   }

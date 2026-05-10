@@ -59,6 +59,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<void> loginWithGoogle({String? idToken, String? accessToken}) async {
+    try {
+      final tokens = await _authService.loginWithGoogle(
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+      await _tokenStorage.saveTokens(tokens);
+      final user = await _authService.fetchMe(tokens.accessToken);
+      state = AuthAuthenticated(user);
+    } on AuthException catch (e) {
+      state = AuthUnauthenticated(errorMessage: e.message);
+      rethrow;
+    }
+  }
+
   Future<void> register({
     required String email,
     required String password,

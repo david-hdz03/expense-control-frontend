@@ -263,12 +263,14 @@ class QuickActionGrid extends StatelessWidget {
   final VoidCallback onIncome;
   final VoidCallback onExpense;
   final VoidCallback onReports;
+  final bool reportsUnlocked;
 
   const QuickActionGrid({
     Key? key,
     required this.onIncome,
     required this.onExpense,
     required this.onReports,
+    this.reportsUnlocked = false,
   }) : super(key: key);
 
   @override
@@ -296,7 +298,8 @@ class QuickActionGrid extends StatelessWidget {
           icon: Icons.bar_chart,
           label: 'Reportes',
           color: FlowCashTokens.amber,
-          onPressed: onReports,
+          onPressed: reportsUnlocked ? onReports : null,
+          locked: !reportsUnlocked,
         ),
       ],
     );
@@ -307,7 +310,8 @@ class _QuickActionTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
+  final bool locked;
 
   const _QuickActionTile({
     Key? key,
@@ -315,68 +319,86 @@ class _QuickActionTile extends StatelessWidget {
     required this.label,
     required this.color,
     required this.onPressed,
+    this.locked = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: Colors.white.withOpacity(0.05),
-              border: Border.all(color: Colors.white.withOpacity(0.06)),
-            ),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [color, color.withOpacity(0.8)],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: color.withOpacity(0.6),
-                            blurRadius: 14,
-                            offset: const Offset(0, 6),
+    return Tooltip(
+      message: locked ? 'Disponible después de 1 mes de movimientos' : '',
+      child: Column(
+        children: [
+          Expanded(
+            child: Opacity(
+              opacity: locked ? 0.38 : 1.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white.withOpacity(0.05),
+                  border: Border.all(color: Colors.white.withOpacity(0.06)),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: locked
+                                  ? [
+                                      FlowCashTokens.textDarkDim,
+                                      FlowCashTokens.textDarkDim,
+                                    ]
+                                  : [color, color.withOpacity(0.8)],
+                            ),
+                            boxShadow: locked
+                                ? []
+                                : [
+                                    BoxShadow(
+                                      color: color.withOpacity(0.6),
+                                      blurRadius: 14,
+                                      offset: const Offset(0, 6),
+                                    ),
+                                  ],
                           ),
-                        ],
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: onPressed,
-                          borderRadius: BorderRadius.circular(12),
-                          child: Icon(icon, color: Colors.white, size: 18),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: locked ? null : onPressed,
+                              borderRadius: BorderRadius.circular(12),
+                              child: Icon(
+                                locked ? Icons.lock_outline : icon,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w600,
-            color: FlowCashTokens.textDark,
-            letterSpacing: -0.1,
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: locked ? FlowCashTokens.textDarkDim : FlowCashTokens.textDark,
+              letterSpacing: -0.1,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -1088,15 +1110,36 @@ class FilterPillRow extends StatelessWidget {
 // WebTopNav — top navigation bar for web dashboard layout
 // ---------------------------------------------------------------------------
 
-class WebTopNav extends StatelessWidget {
+class WebTopNav extends StatefulWidget {
   final String userName;
   final VoidCallback onLogout;
+  final ValueChanged<String>? onSearch;
 
   const WebTopNav({
     Key? key,
     required this.userName,
     required this.onLogout,
+    this.onSearch,
   }) : super(key: key);
+
+  @override
+  State<WebTopNav> createState() => _WebTopNavState();
+}
+
+class _WebTopNavState extends State<WebTopNav> {
+  final _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1147,15 +1190,13 @@ class WebTopNav extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Spacer(),
-                // Right: Search + bell + avatar
-                SizedBox(
-                  width: 200,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      // Search bar
-                      Container(
+                // Center: Search bar
+                const SizedBox(width: 24),
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 480),
+                      child: Container(
                         height: 40,
                         padding: const EdgeInsets.symmetric(horizontal: 14),
                         decoration: BoxDecoration(
@@ -1164,67 +1205,80 @@ class WebTopNav extends StatelessWidget {
                           border: Border.all(color: FlowCashTokens.borderDark),
                         ),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(
-                              Icons.auto_awesome,
-                              size: 14,
-                              color: FlowCashTokens.teal,
-                            ),
-                            SizedBox(width: 6),
-                            Text(
-                              'Search ⌘K',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: FlowCashTokens.textDarkMuted,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // Avatar + popup logout
-                      PopupMenuButton<String>(
-                        onSelected: (v) {
-                          if (v == 'logout') onLogout();
-                        },
-                        itemBuilder: (_) => const [
-                          PopupMenuItem(
-                            value: 'logout',
-                            child: Text('Cerrar sesión'),
-                          ),
-                        ],
-                        child: Row(
                           children: [
-                            Container(
-                              width: 42,
-                              height: 42,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    FlowCashTokens.indigo,
-                                    FlowCashTokens.teal,
-                                  ],
+                            const Icon(Icons.search, size: 18, color: FlowCashTokens.textDarkMuted),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: TextField(
+                                controller: _searchController,
+                                onChanged: widget.onSearch,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: FlowCashTokens.textDark,
                                 ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  userName.substring(0, 2).toUpperCase(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 14,
+                                decoration: const InputDecoration(
+                                  hintText: 'Buscar (tipo/categoria/monto)',
+                                  hintStyle: TextStyle(
+                                    fontSize: 13,
+                                    color: FlowCashTokens.textDarkMuted,
                                   ),
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.zero,
                                 ),
+                                cursorColor: FlowCashTokens.teal,
                               ),
                             ),
+                            if (_searchController.text.isNotEmpty)
+                              GestureDetector(
+                                onTap: () {
+                                  _searchController.clear();
+                                  widget.onSearch?.call('');
+                                },
+                                child: const Icon(Icons.close, size: 16, color: FlowCashTokens.textDarkMuted),
+                              ),
                           ],
                         ),
                       ),
-                    ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 24),
+                // Right: Avatar + popup logout
+                PopupMenuButton<String>(
+                  onSelected: (v) {
+                    if (v == 'logout') widget.onLogout();
+                  },
+                  itemBuilder: (_) => const [
+                    PopupMenuItem(
+                      value: 'logout',
+                      child: Text('Cerrar sesión'),
+                    ),
+                  ],
+                  child: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          FlowCashTokens.indigo,
+                          FlowCashTokens.teal,
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.userName.substring(0, 2).toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -1235,4 +1289,3 @@ class WebTopNav extends StatelessWidget {
     );
   }
 }
-

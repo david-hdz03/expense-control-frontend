@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _selectedFilter = 'Todos';
+  String _searchQuery = '';
 
   Future<void> _deleteExpense(int id) async {
     final confirmed = await showDialog<bool>(
@@ -67,9 +68,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  bool _reportsUnlocked(List<Expense> expenses) {
+    if (expenses.isEmpty) return false;
+    final earliest = expenses
+        .map((e) => e.transactionDate)
+        .reduce((a, b) => a.isBefore(b) ? a : b);
+    return DateTime.now().difference(earliest).inDays >= 30;
+  }
+
   List<Expense> _applyFilter(List<Expense> expenses) {
     final now = DateTime.now();
-    return switch (_selectedFilter) {
+    var result = switch (_selectedFilter) {
       'Ingresos' => expenses.where((e) => e.type == ExpenseType.income).toList(),
       'Gastos'   => expenses.where((e) => e.type == ExpenseType.expense).toList(),
       'Este mes' => expenses.where((e) =>
@@ -78,6 +87,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'Próximos' => expenses.where((e) => e.isUpcoming).toList(),
       _          => expenses,
     };
+    final q = _searchQuery.trim().toLowerCase();
+    if (q.isEmpty) return result;
+    return result.where((e) {
+      final categoryMatch = (e.category ?? '').toLowerCase().contains(q);
+      final typeLabel = e.type == ExpenseType.income ? 'ingreso' : 'gasto';
+      final typeMatch = typeLabel.contains(q);
+      return categoryMatch || typeMatch;
+    }).toList();
   }
 
   @override
@@ -253,6 +270,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       onIncome: () => _openExpenseForm(type: ExpenseType.income),
                       onExpense: () => _openExpenseForm(),
                       onReports: () {},
+                      reportsUnlocked: _reportsUnlocked(expensesAsync.value ?? []),
                     ),
                     const SizedBox(height: 22),
                     // Recent transactions header
@@ -417,6 +435,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               WebTopNav(
                 userName: userName,
                 onLogout: () => ref.read(authProvider.notifier).logout(),
+                onSearch: (q) => setState(() => _searchQuery = q),
               ),
               // 3-column body
               Expanded(
@@ -516,6 +535,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             onIncome: () => _openExpenseForm(type: ExpenseType.income),
                             onExpense: () => _openExpenseForm(),
                             onReports: () {},
+                            reportsUnlocked: _reportsUnlocked(expenses),
                           ),
                         ],
                       ),
