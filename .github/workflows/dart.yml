@@ -32,7 +32,7 @@ jobs:
           fi
 
       - name: Compilar Flutter Web
-        run: flutter build web --release --base-href "/expense-control-frontend/" --dart-define="API_BASE_URL=${{ secrets.API_URL }}"
+        run: flutter build web --release --base-href "/" --dart-define="API_BASE_URL=${{ secrets.API_URL }}"
 
       - name: Desplegar a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
