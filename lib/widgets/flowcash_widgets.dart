@@ -673,12 +673,12 @@ class WebDecoPanel extends StatelessWidget {
             child: child,
           ),
           // Copyright
-          const Positioned(
+          Positioned(
             bottom: 24,
             left: 64,
             child: Text(
-              '© 2025 FlowCash. All rights reserved.',
-              style: TextStyle(
+              '© ${DateTime.now().year} FlowCash. All rights reserved.',
+              style: const TextStyle(
                 fontFamily: 'JetBrains Mono',
                 fontSize: 11,
                 color: FlowCashTokens.textDarkDim,

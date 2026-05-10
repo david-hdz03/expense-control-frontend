@@ -101,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         const SizedBox(height: 6),
                         const Text(
-                          'Tu dinero, finalmente en flujo.',
+                          'Registra hoy. Decide mejor mañana.',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -154,9 +154,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         color: FlowCashTokens.textDark,
                       ),
                       children: [
-                        TextSpan(text: 'Tu dinero,\n'),
-                        TextSpan(text: 'finalmente en '),
-                        // "flow." handled below via ShaderMask inline trick
+                        TextSpan(text: 'Tus gastos,\n'),
+                        TextSpan(text: 'bajo '),
+                        // "control." handled below via ShaderMask inline trick
                       ],
                     ),
                   ),
@@ -168,7 +168,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       colors: [FlowCashTokens.indigo, FlowCashTokens.teal],
                     ).createShader(bounds),
                     child: const Text(
-                      'flow.',
+                      'control.',
                       style: TextStyle(
                         fontFamily: 'Space Grotesk',
                         fontSize: 52,
@@ -183,7 +183,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(
                     width: 440,
                     child: Text(
-                      'Registra cada peso, identifica patrones y mantén el control de tus gastos sin complicaciones.',
+                      'Un lugar para cada movimiento. Categoriza, revisa patrones y mantente dentro de lo que planeaste.',
                       style: TextStyle(
                         fontSize: 16,
                         color: FlowCashTokens.textDarkMuted,
@@ -202,7 +202,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Bienvenido de nuevo',
+                    'Continúa donde lo dejaste',
                     style: TextStyle(
                       fontFamily: 'Space Grotesk',
                       fontSize: 32,
@@ -213,7 +213,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    'Inicia sesión para continuar.',
+                    'Ingresa para ver tu historial de gastos.',
                     style: TextStyle(
                       fontSize: 14,
                       color: FlowCashTokens.textDarkMuted,
@@ -320,64 +320,64 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             isLoading: _submitting,
             enabled: !_submitting,
           ),
-          const SizedBox(height: 22),
-          // Divider
-          Row(
-            children: [
-              Expanded(
-                child: Container(height: 1, color: FlowCashTokens.borderDark),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text(
-                  'o continuar con',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: FlowCashTokens.textDarkDim,
-                    letterSpacing: 1.4,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(height: 1, color: FlowCashTokens.borderDark),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          // Google button
-          Container(
-            width: double.infinity,
-            height: 52,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white.withOpacity(0.04),
-              border: Border.all(color: FlowCashTokens.borderDarkStrong),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: _submitting ? null : () {},
-                borderRadius: BorderRadius.circular(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    GoogleGMark(size: 20),
-                    SizedBox(width: 10),
-                    Text(
-                      'Continuar con Google',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: FlowCashTokens.textDark,
-                        letterSpacing: -0.1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // const SizedBox(height: 22),
+          // // Divider
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: Container(height: 1, color: FlowCashTokens.borderDark),
+          //     ),
+          //     Padding(
+          //       padding: const EdgeInsets.symmetric(horizontal: 12),
+          //       child: Text(
+          //         'o continuar con',
+          //         style: TextStyle(
+          //           fontSize: 11,
+          //           fontWeight: FontWeight.w500,
+          //           color: FlowCashTokens.textDarkDim,
+          //           letterSpacing: 1.4,
+          //         ),
+          //       ),
+          //     ),
+          //     Expanded(
+          //       child: Container(height: 1, color: FlowCashTokens.borderDark),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: 16),
+          // // Google button
+          // Container(
+          //   width: double.infinity,
+          //   height: 52,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(16),
+          //     color: Colors.white.withOpacity(0.04),
+          //     border: Border.all(color: FlowCashTokens.borderDarkStrong),
+          //   ),
+          //   child: Material(
+          //     color: Colors.transparent,
+          //     child: InkWell(
+          //       onTap: _submitting ? null : () {},
+          //       borderRadius: BorderRadius.circular(16),
+          //       child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: const [
+          //           GoogleGMark(size: 20),
+          //           SizedBox(width: 10),
+          //           Text(
+          //             'Continuar con Google',
+          //             style: TextStyle(
+          //               fontSize: 15,
+          //               fontWeight: FontWeight.w600,
+          //               color: FlowCashTokens.textDark,
+          //               letterSpacing: -0.1,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
