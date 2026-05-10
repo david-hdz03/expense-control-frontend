@@ -20,10 +20,12 @@ FlowCash permite registrar movimientos, consultar balance y gestionar la sesión
 - Interfaz responsive con layouts diferenciados para web y mobile.
 
 ## Capturas
-Guarda tus capturas en `docs/screenshots/` para que se rendericen en GitHub.
 
+- Login
 ![Login](docs/screenshots/login.png)
+- Dashboard
 ![Dashboard](docs/screenshots/dashboard.png)
+- Nuevo movimiento
 ![Nuevo movimiento](docs/screenshots/new-transaction.png)
 
 ## Stack tecnológico
