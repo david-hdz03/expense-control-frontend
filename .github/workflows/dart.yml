@@ -26,13 +26,22 @@ jobs:
         run: |
           if [ -z "${{ secrets.API_URL }}" ]; then
             echo "🚨 EL SECRETO ESTÁ VACÍO. GitHub no lo está leyendo."
-            exit 1 # Esto detendrá el workflow para que no pierdas tiempo compilando
+            exit 1
           else
             echo "✅ El secreto se cargó correctamente."
           fi
+          if [ -z "${{ secrets.GOOGLE_CLIENT_ID_WEB }}" ]; then
+            echo "🚨 GOOGLE_CLIENT_ID_WEB está vacío."
+            exit 1
+          else
+            echo "✅ GOOGLE_CLIENT_ID_WEB cargado."
+          fi
 
       - name: Compilar Flutter Web
-        run: flutter build web --release --base-href "/" --dart-define="API_BASE_URL=${{ secrets.API_URL }}"
+        run: |
+          flutter build web --release --base-href "/" \
+            --dart-define="API_BASE_URL=${{ secrets.API_URL }}" \
+            --dart-define="GOOGLE_CLIENT_ID_WEB=${{ secrets.GOOGLE_CLIENT_ID_WEB }}"
 
       - name: Desplegar a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
