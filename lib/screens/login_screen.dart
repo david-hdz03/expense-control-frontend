@@ -412,31 +412,50 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Widget _buildRegisterLink(BuildContext context) {
-    return Center(
-      child: RichText(
-        text: TextSpan(
-          text: '¿No tienes cuenta? ',
-          style: const TextStyle(
-            fontSize: 14,
-            color: FlowCashTokens.textDarkMuted,
-          ),
-          children: [
-            TextSpan(
-              text: 'Regístrate',
+    return Column(
+      children: [
+        Center(
+          child: RichText(
+            text: TextSpan(
+              text: '¿No tienes cuenta? ',
               style: const TextStyle(
-                color: FlowCashTokens.teal,
-                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: FlowCashTokens.textDarkMuted,
               ),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const RegisterScreen(),
-                      ),
-                    ),
+              children: [
+                TextSpan(
+                  text: 'Regístrate',
+                  style: const TextStyle(
+                    color: FlowCashTokens.teal,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const RegisterScreen(),
+                          ),
+                        ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: 16),
+        Center(
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed('/privacy'),
+            child: const Text(
+              'Aviso de Privacidad',
+              style: TextStyle(
+                fontSize: 12,
+                color: FlowCashTokens.textDarkDim,
+                decoration: TextDecoration.underline,
+                decorationColor: FlowCashTokens.textDarkDim,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

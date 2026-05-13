@@ -6,6 +6,7 @@ import 'providers/auth_state.dart';
 import 'screens/email_verification_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import 'screens/privacy_policy_screen.dart';
 import 'screens/splash_screen.dart';
 import 'theme/theme.dart';
 
@@ -21,6 +22,9 @@ class ExpenseControlApp extends ConsumerWidget {
       theme: FlowCashTheme.darkTheme(),
       darkTheme: FlowCashTheme.darkTheme(),
       themeMode: ThemeMode.dark,
+      routes: {
+        '/privacy': (_) => const PrivacyPolicyScreen(),
+      },
       home: switch (authState) {
         AuthUnknown() => const SplashScreen(),
         AuthUnauthenticated() => const LoginScreen(),

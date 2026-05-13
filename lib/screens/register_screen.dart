@@ -7,6 +7,7 @@ import '../services/auth_service.dart';
 import '../theme/tokens.dart';
 import '../widgets/flowcash_widgets.dart';
 
+
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -488,43 +489,44 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _agreeToTerms = !_agreeToTerms),
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'Acepto los ',
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          color: FlowCashTokens.textDarkMuted,
-                          height: 1.5,
-                        ),
-                        children: const [
-                          TextSpan(
-                            text: 'Términos de Servicio',
-                            style: TextStyle(
-                              color: FlowCashTokens.teal,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' y la ',
-                            style:
-                                TextStyle(color: FlowCashTokens.textDarkMuted),
-                          ),
-                          TextSpan(
-                            text: 'Política de Privacidad',
-                            style: TextStyle(
-                              color: FlowCashTokens.teal,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' de FlowCash.',
-                            style:
-                                TextStyle(color: FlowCashTokens.textDarkMuted),
-                          ),
-                        ],
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Acepto los ',
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        color: FlowCashTokens.textDarkMuted,
+                        height: 1.5,
                       ),
+                      children: [
+                        TextSpan(
+                          text: 'Términos de Servicio',
+                          style: const TextStyle(
+                            color: FlowCashTokens.teal,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () =>
+                                setState(() => _agreeToTerms = !_agreeToTerms),
+                        ),
+                        const TextSpan(
+                          text: ' y la ',
+                          style: TextStyle(color: FlowCashTokens.textDarkMuted),
+                        ),
+                        TextSpan(
+                          text: 'Política de Privacidad',
+                          style: const TextStyle(
+                            color: FlowCashTokens.teal,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () =>
+                                Navigator.of(context).pushNamed('/privacy'),
+                        ),
+                        const TextSpan(
+                          text: ' de FlowCash.',
+                          style: TextStyle(color: FlowCashTokens.textDarkMuted),
+                        ),
+                      ],
                     ),
                   ),
                 ),
